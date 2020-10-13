@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Linq;
 using System.Text;
 using static Bidirectional8Puzzle.Node;
 
@@ -31,36 +32,39 @@ namespace Bidirectional8Puzzle
                 case Direction.Down: return Direction.Up;
                 case Direction.Left: return Direction.Right;
             }
-            return Direction.Up;
+            return Direction.None;
         }
     }
 
     class Node
     {
+        public const bool dbg = false;
 
         public byte[,] Field = new byte[3,3];
 
-        public Node parent;
-        public Direction directionFrom;
+        public Node Parent;
+        public Direction DirectionFrom;
 
         public enum Direction
         {
             Up = 0,
             Right = 1,
             Down = 2,
-            Left = 3
+            Left = 3,
+            None = 4
         }
 
         public Node(byte[,] fieldArray)
         {
-            parent = null;
+            Parent = null;
+            DirectionFrom = Direction.None;
             CopyBytes(fieldArray, Field, 3);
         }
         public Node(Node node, Direction direction)
         {
             //References for parent and applied move
-            parent = node;
-            directionFrom = direction;
+            Parent = node;
+            DirectionFrom = direction;
 
             //Find the position of empty space
             byte spaceX = 0;
@@ -100,23 +104,35 @@ namespace Bidirectional8Puzzle
             }
         }
 
-        public override string ToString()
+        public string ToString(bool swapDirection = false)
         {
             String res = "";
-            res += Field[0, 0].ToString() + Field[0, 1].ToString() + Field[0, 2].ToString() + "\n";
-            res += Field[1, 0].ToString() + Field[1, 1].ToString() + Field[1, 2].ToString() + "\n";
-            res += Field[2, 0].ToString() + Field[2, 1].ToString() + Field[2, 2].ToString() + "\n";
-            res += "Move: " + directionFrom.Opposite().ToString() + "\n";
+            res += swapDirection ? ("Move: " + DirectionFrom.ToString() + "\n") : "";
+            if (dbg)
+            {
+                res += Field[0, 0].ToString() + Field[0, 1].ToString() + Field[0, 2].ToString() + "\n";
+                res += Field[1, 0].ToString() + Field[1, 1].ToString() + Field[1, 2].ToString() + "\n";
+                res += Field[2, 0].ToString() + Field[2, 1].ToString() + Field[2, 2].ToString() + "\n";
+            }
+            res += !swapDirection ? ("Move: " + DirectionFrom.Opposite().ToString()) : "";
             return res;
         }
 
-        public string printParents()
+        public void GetDirections(List<Direction> listToPopulate, bool swapDirection = false)
         {
-            if (parent != null)
+            if (Parent != null)
             {
-                return ToString() + "\n" + parent.printParents();
+                listToPopulate.Add(swapDirection ? DirectionFrom.Opposite() : DirectionFrom);
+                Parent.GetDirections(listToPopulate, swapDirection);
             }
-            return ToString();
+        }
+        public string PrintParents(bool swapDirection = false)
+        {
+            if (Parent != null)
+            {
+                return ToString(swapDirection) + "\n" + Parent.PrintParents(swapDirection);
+            }
+            return "Root Node";
         }
 
         public static bool DirectionValid(Node node, Direction direction)

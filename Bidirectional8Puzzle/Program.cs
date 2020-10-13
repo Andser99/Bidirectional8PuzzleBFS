@@ -9,9 +9,13 @@ namespace Bidirectional8Puzzle
         {
             Console.WriteLine("8-Puzzle");
 
-            byte[,] startField = {  { 1, 0, 2 },
-                                    { 4, 5, 3 }, 
+            byte[,] startField = {  { 5, 4, 2 },
+                                    { 1, 0, 3 }, 
                                     { 7, 8, 6 } };
+
+            //byte[,] startField = {  { 5, 4, 2 },
+            //                        { 1, 8, 3 },
+            //                        { 0, 7, 6 } };
 
             byte [,] solvedField = {    { 1, 2, 3 },
                                         { 4, 5, 6 },
@@ -22,6 +26,8 @@ namespace Bidirectional8Puzzle
             Node endNode = new Node(solvedField);
 
             BFS  bfs = new BFS(startNode, endNode);
+            bfs.PrintResult();
+
 
             Console.WriteLine(endNode);
         }
