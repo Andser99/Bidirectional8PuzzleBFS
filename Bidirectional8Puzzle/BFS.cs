@@ -1,35 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using static Bidirectional8Puzzle.Node;
 
 namespace Bidirectional8Puzzle
 {
     class BFS
     {
-
-        private const int DEPTH_LIMIT = 50;
         private HashSet<Node> visitedStart;
         private HashSet<Node> visitedEnd;
         public List<Direction> Result { get; private set; }
+        public int MaxDepth;
 
         private int ExploredFromStart;
         private int ExploredFromEnd;
 
-        public BFS(Node startNode, Node endNode)
+        public BFS(Node startNode, Node endNode, int maxDepth = 50)
         {
-            int depth = 0;
-            visitedStart = new HashSet<Node>(new NodeComparer());
-            visitedEnd = new HashSet<Node>(new NodeComparer());
+            MaxDepth = maxDepth;
+            visitedStart = new HashSet<Node>();
+            visitedEnd = new HashSet<Node>();
 
             List<Node> listStart = new List<Node>();
             List<Node> listEnd = new List<Node>();
             listStart.Add(startNode);
             listEnd.Add(endNode);
 
-            while (depth < DEPTH_LIMIT)
+            int depth = 0;
+            while (depth < maxDepth)
             {
                 depth++;
 
@@ -106,10 +103,18 @@ namespace Bidirectional8Puzzle
                 listEnd = newListEnd.ToList();
 
             }
+
+            Result = new List<Direction>() { Direction.None };
         }
 
         public void PrintResult()
         {
+            if (Result[0] == Direction.None)
+            {
+                Console.WriteLine("No solution found within a reasonable time frame, consider increasing the search depth.");
+                Console.WriteLine($"Max Depth: {MaxDepth}");
+                return;
+            }
             Console.WriteLine($"Nodes explored: {ExploredFromStart + ExploredFromEnd}({ExploredFromStart})({ExploredFromEnd})");
             foreach (var x in Result)
             {

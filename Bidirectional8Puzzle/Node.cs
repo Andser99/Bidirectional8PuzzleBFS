@@ -1,58 +1,16 @@
-﻿using Microsoft.VisualBasic.CompilerServices;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using static Bidirectional8Puzzle.Node;
 
 namespace Bidirectional8Puzzle
 {
-    class NodeComparer : IEqualityComparer<Node>
-    {
-        public bool Equals(Node a, Node b)
-        {
-            return a.Equals(b);
-        }
-        public int GetHashCode(Node node)
-        {
-            return node.GetHashCode();
-        }
-    }
-
-    static class DirectionExtensions
-    {
-        public static Direction Opposite(this Direction dir)
-        {
-            switch (dir)
-            {
-                case Direction.Up: return Direction.Down;
-                case Direction.Right: return Direction.Left;
-                case Direction.Down: return Direction.Up;
-                case Direction.Left: return Direction.Right;
-            }
-            return Direction.None;
-        }
-    }
 
     class Node
     {
-        public const bool dbg = false;
-
         public byte[,] Field = new byte[3,3];
 
         public Node Parent;
         public Direction DirectionFrom;
-
-        public enum Direction
-        {
-            Up = 0,
-            Right = 1,
-            Down = 2,
-            Left = 3,
-            None = 4
-        }
 
         public Node(byte[,] fieldArray)
         {
@@ -108,13 +66,19 @@ namespace Bidirectional8Puzzle
         {
             String res = "";
             res += swapDirection ? ("Move: " + DirectionFrom.ToString() + "\n") : "";
-            if (dbg)
-            {
                 res += Field[0, 0].ToString() + Field[0, 1].ToString() + Field[0, 2].ToString() + "\n";
                 res += Field[1, 0].ToString() + Field[1, 1].ToString() + Field[1, 2].ToString() + "\n";
                 res += Field[2, 0].ToString() + Field[2, 1].ToString() + Field[2, 2].ToString() + "\n";
-            }
             res += !swapDirection ? ("Move: " + DirectionFrom.Opposite().ToString()) : "";
+            return res;
+        }
+
+        public override string ToString()
+        {
+            String res = "";
+            res += Field[0, 0].ToString() + Field[0, 1].ToString() + Field[0, 2].ToString() + "\n";
+            res += Field[1, 0].ToString() + Field[1, 1].ToString() + Field[1, 2].ToString() + "\n";
+            res += Field[2, 0].ToString() + Field[2, 1].ToString() + Field[2, 2].ToString() + "\n";
             return res;
         }
 
@@ -170,7 +134,10 @@ namespace Bidirectional8Puzzle
 
         public bool IsEqual(Node node)
         {
-            if (node == null && this != null) return false;
+            if (node == null && this != null)
+            {
+                return false;
+            }
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)

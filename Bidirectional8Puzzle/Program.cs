@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 
 namespace Bidirectional8Puzzle
 {
@@ -9,9 +11,9 @@ namespace Bidirectional8Puzzle
         {
             Console.WriteLine("8-Puzzle");
 
-            byte[,] startField = {  { 5, 4, 2 },
-                                    { 1, 0, 3 }, 
-                                    { 7, 8, 6 } };
+            byte[,] startField = {  { 0, 2, 3 },
+                                    { 5, 8, 6 },
+                                    { 1, 4, 7 } };
 
             //byte[,] startField = {  { 5, 4, 2 },
             //                        { 1, 8, 3 },
@@ -24,12 +26,9 @@ namespace Bidirectional8Puzzle
 
             Node startNode = new Node(startField);
             Node endNode = new Node(solvedField);
-
-            BFS  bfs = new BFS(startNode, endNode);
+            Console.WriteLine(((object)startNode));
+            BFS  bfs = new BFS(startNode, endNode, 10);
             bfs.PrintResult();
-
-
-            Console.WriteLine(endNode);
         }
     }
 }
