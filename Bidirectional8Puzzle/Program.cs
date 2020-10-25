@@ -40,6 +40,7 @@ namespace Bidirectional8Puzzle
                                                 { 13, 14, 15, 0 } };
         public static Node endNodeFour;
 
+        public static bool Swap = false;
 
         static void Main(string[] args)
         { 
@@ -97,7 +98,7 @@ namespace Bidirectional8Puzzle
             //bfs.PrintResult();
 
             Console.Clear();
-            Console.Write(" \"v\" to visualize last puzzle\n \"p\" to print possible puzzles\n \"s\" to select by ID\n \"n\" to create a new puzzle, only fields with < 255 elements are supported");
+            Console.WriteLine($" \"v\" to visualize last puzzle\n \"p\" to print possible puzzles\n \"s\" to select by ID\n \"n\" to create a new puzzle, only fields with < 255 elements are supported\n \"r\" Swap: {Swap}");
             var inp = Console.ReadKey();
             string error = "";
             while (inp.Key != ConsoleKey.Escape)
@@ -106,7 +107,7 @@ namespace Bidirectional8Puzzle
                 {
                     bfs.Visualize();
                 }
-                if (inp.Key == ConsoleKey.P)
+                else if (inp.Key == ConsoleKey.P)
                 {
                     int index = 0;
                     foreach (Tuple<Node,Node> t in puzzles)
@@ -116,7 +117,7 @@ namespace Bidirectional8Puzzle
                         index++;
                     }
                 }
-                if (inp.Key == ConsoleKey.S)
+                else if (inp.Key == ConsoleKey.S)
                 {
                     Console.WriteLine("Choose a puzzle ID");
                     foreach (var x in Enumerable.Range(0, puzzles.Count))
@@ -128,11 +129,21 @@ namespace Bidirectional8Puzzle
                     if (choice.All(char.IsDigit))
                     {
                         int id = Convert.ToInt32(choice);
-                        bfs = new BFS(puzzles[id].Item1, puzzles[id].Item2);
-                        bfs.PrintResult();
+                        if (Swap)
+                        {
+                            bfs = new BFS(puzzles[id].Item1, puzzles[id].Item2);
+                        }
+                        else
+                        {
+                            bfs = new BFS(puzzles[id].Item2, puzzles[id].Item1);
+                        }
                     }
                 }
-                if (inp.Key == ConsoleKey.N)
+                else if (inp.Key == ConsoleKey.R)
+                {
+                    Swap = !Swap;
+                }
+                else if (inp.Key == ConsoleKey.N)
                 {
                     Console.Clear();
                     Console.Write("Search depth: ");
@@ -176,13 +187,21 @@ namespace Bidirectional8Puzzle
 
                     Node endNode = new Node(endField, width, height);
                     puzzles.Add(new Tuple<Node,Node>(newNode, endNode));
-                    bfs = new BFS(newNode, endNode, depth);
+                    if (Swap)
+                    {
+                        bfs = new BFS(endNode, newNode, depth);
+                    } 
+                    else
+                    {
+                        bfs = new BFS(newNode, endNode, depth);
+                    }
                     bfs.PrintResult();
                 }
-                inp = Console.ReadKey();
                 Console.Clear();
-                Console.Write(" \"v\" to visualize last puzzle\n \"p\" to print possible puzzles\n \"s\" to select by ID\n \"n\" to create a new puzzle, only fields with < 255 elements are supported");
+                Console.Write($" \"v\" to visualize last puzzle\n \"p\" to print possible puzzles\n \"s\" to select by ID\n \"n\" to create a new puzzle, only fields with < 255 elements are supported\n \"r\" Swap: {Swap}");
                 Console.WriteLine(error == "" ? "" : "\n" + error);
+                bfs.PrintResult();
+                inp = Console.ReadKey();
                 error = "";
             }
 

@@ -9,12 +9,18 @@ namespace Bidirectional8Puzzle
     {
         private Node StartNode;
         private List<Direction> Directions;
+        long TotalRunTime;
+        int ExploredFromEnd;
+        int ExploredFromStart;
 
         public int MillisecondDelay { get; set; } = 200;
-        public NodeVisualizer(Node start, List<Direction> directions)
+        public NodeVisualizer(Node start, List<Direction> directions, int exploredFromEnd, int exploredFromStart, long totalTime)
         {
             Directions = directions;
             StartNode = start;
+            ExploredFromEnd = exploredFromEnd;
+            ExploredFromStart = exploredFromStart;
+            TotalRunTime = totalTime;
         }
 
 
@@ -28,7 +34,7 @@ namespace Bidirectional8Puzzle
             foreach (Direction dir in Directions)
             {
                 Console.Clear();
-                Console.WriteLine("<ESC> to quit, any other key to make a step");
+                Console.WriteLine($"<ESC> to quit, any other key to make a step, time({TotalRunTime}ms) total nodes({ExploredFromStart + ExploredFromEnd})");
                 for (var i = index; i < Directions.Count; i++)
                 {
                     Console.Write(Directions[i] + ">");

@@ -19,6 +19,7 @@ namespace Bidirectional8Puzzle
         private int ExploredFromEnd;
 
         private long TotalRunTime;
+        private bool Aborted = false;
 
         public BFS(Node startNode, Node endNode, int maxDepth = 1)
         {
@@ -167,6 +168,7 @@ namespace Bidirectional8Puzzle
                 }
                 if (inp == "q")
                 {
+                    Aborted = true;
                     return false;
                 }
                 inp = Console.ReadLine();
@@ -179,27 +181,30 @@ namespace Bidirectional8Puzzle
         // Instantiates and starts a visualizer for this solution
         public void Visualize()
         {
-            NodeVisualizer visualizer = new NodeVisualizer(StartNode, Result);
+            NodeVisualizer visualizer = new NodeVisualizer(StartNode, Result, ExploredFromEnd, ExploredFromStart, TotalRunTime);
             visualizer.Start();
         }
 
         public void PrintResult()
         {
-            if (Result[0] == Direction.None)
+            if (!Aborted && Result != null)
             {
-                Console.WriteLine("No solution found within a reasonable time frame, consider increasing the search depth.");
-                Console.WriteLine($"Max Depth: {MaxDepth}");
-                return;
+                if (Result[0] == Direction.None)
+                {
+                    Console.WriteLine("No solution found within a reasonable time frame, consider increasing the search depth.");
+                    Console.WriteLine($"Max Depth: {MaxDepth}");
+                    return;
+                }
+                Console.WriteLine($"Nodes explored: {ExploredFromStart + ExploredFromEnd}({ExploredFromStart})({ExploredFromEnd})");
+                Console.WriteLine($"Final depth and run time in [ms]: {CurrentDepth}, {TotalRunTime}ms");
+                foreach (var x in Result)
+                {
+                    Console.Write(x.ToString()[0] + ">");
+                }
+                Console.WriteLine();
+                Console.WriteLine(StartNode);
+                Console.WriteLine("Press \"v\" to start a step by step solution of this puzzle.");
             }
-            Console.WriteLine($"Nodes explored: {ExploredFromStart + ExploredFromEnd}({ExploredFromStart})({ExploredFromEnd})");
-            Console.WriteLine($"Final depth and run time in [ms]: {CurrentDepth}, {TotalRunTime}ms");
-            foreach (var x in Result)
-            {
-                Console.Write(x.ToString()[0] + ">");
-            }
-            Console.WriteLine();
-            Console.WriteLine(StartNode);
-            Console.WriteLine("Press \"v\" to start a step by step solution of this puzzle.");
         }
     }
 }
