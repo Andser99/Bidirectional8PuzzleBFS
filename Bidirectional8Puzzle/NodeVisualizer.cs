@@ -13,9 +13,11 @@ namespace Bidirectional8Puzzle
         int ExploredFromEnd;
         int ExploredFromStart;
 
+        private bool Verbose = true;
         public int MillisecondDelay { get; set; } = 200;
-        public NodeVisualizer(Node start, List<Direction> directions, int exploredFromEnd, int exploredFromStart, long totalTime)
+        public NodeVisualizer(Node start, List<Direction> directions, int exploredFromEnd, int exploredFromStart, long totalTime, bool verbose)
         {
+            Verbose = verbose;
             Directions = directions;
             StartNode = start;
             ExploredFromEnd = exploredFromEnd;
@@ -34,7 +36,7 @@ namespace Bidirectional8Puzzle
             foreach (Direction dir in Directions)
             {
                 //Console.Clear();
-                Console.WriteLine($"q to quit, any other key to make a step, time({TotalRunTime}ms) total nodes({ExploredFromStart + ExploredFromEnd})");
+                if (Verbose) Console.WriteLine($"q to quit, any other key to make a step, time({TotalRunTime}ms) total nodes({ExploredFromStart + ExploredFromEnd})");
                 for (var i = index; i < Directions.Count; i++)
                 {
                     Console.Write(Directions[i] + ">");
@@ -51,9 +53,12 @@ namespace Bidirectional8Puzzle
                 index++;
             }
             //Console.Clear();
-            Console.WriteLine(" Solved");
-            Console.WriteLine(lastNode);
-            Console.WriteLine();
+            if (Verbose)
+            {
+                Console.WriteLine(" Solved");
+                Console.WriteLine(lastNode);
+                Console.WriteLine();
+            }
         }
     }
 }

@@ -20,9 +20,11 @@ namespace Bidirectional8Puzzle
 
         private long TotalRunTime;
         private bool Aborted = false;
+        private bool Verbose = true;
 
-        public BFS(Node startNode, Node endNode, int maxDepth = 1)
+        public BFS(Node startNode, Node endNode, int maxDepth = 1, bool verbose = true)
         {
+            Verbose = verbose;
             var watch = new System.Diagnostics.Stopwatch();
             watch.Start();
 
@@ -181,7 +183,7 @@ namespace Bidirectional8Puzzle
         // Instantiates and starts a visualizer for this solution
         public void Visualize()
         {
-            NodeVisualizer visualizer = new NodeVisualizer(StartNode, Result, ExploredFromEnd, ExploredFromStart, TotalRunTime);
+            NodeVisualizer visualizer = new NodeVisualizer(StartNode, Result, ExploredFromEnd, ExploredFromStart, TotalRunTime, Verbose);
             visualizer.Start();
         }
 
@@ -201,9 +203,12 @@ namespace Bidirectional8Puzzle
                 {
                     Console.Write(x.ToString()[0] + ">");
                 }
-                Console.WriteLine();
-                Console.WriteLine(StartNode);
-                Console.WriteLine("Type \"v\" to start a step by step solution of this puzzle.");
+                if (Verbose)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine(StartNode);
+                    Console.WriteLine("Type \"v\" to start a step by step solution of this puzzle.");
+                }
             }
         }
     }

@@ -41,12 +41,10 @@ namespace Bidirectional8Puzzle
         public static Node endNodeFour;
 
         public static bool Swap = false;
-
+        private static bool Verbose = true;
         static void Main(string[] args)
         { 
             puzzles = new List<Tuple<Node, Node>>();
-            Console.WriteLine("8-Puzzle");
-
 
             //Solved fields for 3x3, 4x3 and 4x4
 
@@ -55,7 +53,6 @@ namespace Bidirectional8Puzzle
             endNodeFour = new Node(solvedFieldFour, 4, 4);
             endNodeTwo = new Node(solvedFieldTwo, 3, 2);
             endNodeTwoOther = new Node(solvedFieldTwoOther, 2, 3);
-
 
 
             byte[,] startFieldThreeA = {    { 0, 2, 3 },
@@ -98,12 +95,16 @@ namespace Bidirectional8Puzzle
             //bfs.PrintResult();
 
             //Console.Clear();
-            Console.WriteLine($" \"v\" to visualize last puzzle\n \"p\" to print possible puzzles\n \"s\" to select by ID\n \"n\" to create a new puzzle, only fields with < 255 elements are supported\n \"r\" Swap: {Swap}");
+            if (Verbose) Console.WriteLine($" \"v\" to visualize last puzzle\n \"p\" to print possible puzzles\n \"s\" to select by ID\n \"n\" to create a new puzzle, only fields with < 255 elements are supported\n \"r\" Swap: {Swap}");
             var inp = Console.ReadLine();
             string error = "";
             while (inp != "q")
             {
-                if (inp == "v" && bfs != null)
+                if (inp == "verbosity")
+                {
+                    Verbose = !Verbose;
+                }
+                else if (inp == "v" && bfs != null)
                 {
                     bfs.Visualize();
                 }
@@ -147,11 +148,11 @@ namespace Bidirectional8Puzzle
                 else if (inp == "n")
                 {
                     //Console.Clear();
-                    Console.Write("Search depth: ");
+                    if (Verbose) Console.Write("Search depth: ");
                     byte.TryParse(Console.ReadLine(), out byte depth);
-                    Console.Write("Height: ");
+                    if (Verbose) Console.Write("Height: ");
                     byte.TryParse(Console.ReadLine(), out byte height);
-                    Console.Write("Width: ");
+                    if (Verbose) Console.Write("Width: ");
                     byte.TryParse(Console.ReadLine(), out byte width);
 
                     byte[,] field = new byte[height, width];
@@ -190,16 +191,16 @@ namespace Bidirectional8Puzzle
                     puzzles.Add(new Tuple<Node,Node>(newNode, endNode));
                     if (Swap)
                     {
-                        bfs = new BFS(endNode, newNode, depth);
+                        bfs = new BFS(endNode, newNode, depth, Verbose);
                     } 
                     else
                     {
-                        bfs = new BFS(newNode, endNode, depth);
+                        bfs = new BFS(newNode, endNode, depth, Verbose);
                     }
                     bfs.PrintResult();
                 }
-                Console.Write($" \"v\" to visualize last puzzle\n \"p\" to print possible puzzles\n \"s\" to select by ID\n \"n\" to create a new puzzle, only fields with < 255 elements are supported\n \"r\" Swap: {Swap}");
-                Console.WriteLine(error == "" ? "" : "\n" + error);
+                if (Verbose) Console.Write($" \"v\" to visualize last puzzle\n \"p\" to print possible puzzles\n \"s\" to select by ID\n \"n\" to create a new puzzle, only fields with < 255 elements are supported\n \"r\" Swap: {Swap}");
+                if (Verbose) Console.WriteLine(error == "" ? "" : "\n" + error);
                 inp = Console.ReadLine();
                 //Console.Clear();
                 error = "";
