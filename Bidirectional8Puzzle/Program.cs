@@ -197,11 +197,11 @@ namespace Bidirectional8Puzzle
                     }
                     bfs.PrintResult();
                 }
-                Console.Clear();
                 Console.Write($" \"v\" to visualize last puzzle\n \"p\" to print possible puzzles\n \"s\" to select by ID\n \"n\" to create a new puzzle, only fields with < 255 elements are supported\n \"r\" Swap: {Swap}");
                 Console.WriteLine(error == "" ? "" : "\n" + error);
                 bfs.PrintResult();
                 inp = Console.ReadKey();
+                Console.Clear();
                 error = "";
             }
 
