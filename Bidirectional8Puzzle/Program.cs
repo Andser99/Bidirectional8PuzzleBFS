@@ -131,13 +131,14 @@ namespace Bidirectional8Puzzle
                         int id = Convert.ToInt32(choice);
                         if (Swap)
                         {
-                            bfs = new BFS(puzzles[id].Item1, puzzles[id].Item2);
+                            bfs = new BFS(puzzles[id].Item2, puzzles[id].Item1);
                         }
                         else
                         {
-                            bfs = new BFS(puzzles[id].Item2, puzzles[id].Item1);
+                            bfs = new BFS(puzzles[id].Item1, puzzles[id].Item2);
                         }
                     }
+                    bfs.PrintResult();
                 }
                 else if (inp.Key == ConsoleKey.R)
                 {
@@ -199,7 +200,6 @@ namespace Bidirectional8Puzzle
                 }
                 Console.Write($" \"v\" to visualize last puzzle\n \"p\" to print possible puzzles\n \"s\" to select by ID\n \"n\" to create a new puzzle, only fields with < 255 elements are supported\n \"r\" Swap: {Swap}");
                 Console.WriteLine(error == "" ? "" : "\n" + error);
-                bfs.PrintResult();
                 inp = Console.ReadKey();
                 Console.Clear();
                 error = "";
