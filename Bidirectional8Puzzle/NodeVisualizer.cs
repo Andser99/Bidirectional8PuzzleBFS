@@ -28,13 +28,13 @@ namespace Bidirectional8Puzzle
         public void Start(int delay = 200)
         {
             MillisecondDelay = delay;
-            Console.Clear();
+            //Console.Clear();
             Node lastNode = StartNode;
             var index = 0;
             foreach (Direction dir in Directions)
             {
-                Console.Clear();
-                Console.WriteLine($"<ESC> to quit, any other key to make a step, time({TotalRunTime}ms) total nodes({ExploredFromStart + ExploredFromEnd})");
+                //Console.Clear();
+                Console.WriteLine($"q to quit, any other key to make a step, time({TotalRunTime}ms) total nodes({ExploredFromStart + ExploredFromEnd})");
                 for (var i = index; i < Directions.Count; i++)
                 {
                     Console.Write(Directions[i] + ">");
@@ -42,15 +42,15 @@ namespace Bidirectional8Puzzle
                 Console.WriteLine();
                 Console.WriteLine(lastNode);
                 lastNode = new Node(lastNode, dir);
-                var key = Console.ReadKey();
-                if (key.Key == ConsoleKey.Escape)
+                var key = Console.ReadLine();
+                if (key == "q")
                 {
                     break;
                 }
                 //System.Threading.Thread.Sleep(MillisecondDelay);
                 index++;
             }
-            Console.Clear();
+            //Console.Clear();
             Console.WriteLine(" Solved");
             Console.WriteLine(lastNode);
             Console.WriteLine();

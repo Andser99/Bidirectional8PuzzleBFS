@@ -144,7 +144,7 @@ namespace Bidirectional8Puzzle
         {
             var watch = new System.Diagnostics.Stopwatch();
             watch.Start();
-            Console.Clear();
+            //Console.Clear();
             Console.WriteLine($"Max depth reached {MaxDepth}, enter additional depth to explore");
             Console.WriteLine("Optionally, write \"e\" to list all explored nodes, \"q\" to abort");
             var inp = Console.ReadLine();
@@ -203,7 +203,7 @@ namespace Bidirectional8Puzzle
                 }
                 Console.WriteLine();
                 Console.WriteLine(StartNode);
-                Console.WriteLine("Press \"v\" to start a step by step solution of this puzzle.");
+                Console.WriteLine("Type \"v\" to start a step by step solution of this puzzle.");
             }
         }
     }
